@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas</title>
+
+    <style>
+        body {
+            margin: 0;
+            box-sizing: border-box;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        #botoncito {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+
+            transition: all 0.5s ease-out;
+            padding: 15px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: crimson;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="cronometro"
+        style="position: fixed; top: 20px; width: 100%; text-align: center; font-family: sans-serif; font-size: 2rem; color: #ff4757;">
+        Tiempo: 60s
+    </div>
+
+    <button id="botoncito">Pulsame</button>
+
+    <script src="./assets/js/main.js"></script>
+</body>
+
+</html>
