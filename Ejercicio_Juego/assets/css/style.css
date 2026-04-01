@@ -37,7 +37,7 @@ body {
   border-radius: 5px;
 }
 
-#battle-message {
+#mensaje_enemigo,#mensaje_jugador {
   font-size: 1.5rem;
   color: var(--border-dark);
   text-transform: uppercase;
@@ -77,18 +77,49 @@ body {
   text-transform: uppercase;
   outline: none;
 }
+#registro-combate {
+  flex: 2;
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
+  border: 2px solid #68a0a0;           /* Borde a juego con el estilo Pokémon */
+  height: 250px;                       /* Altura fija para que el scroll funcione */
+  overflow-y: auto;                    /* Permite hacer scroll si hay muchos mensajes */
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+}
 
-.btn {
-  border: 4px solid var(--border-light);
-  border-radius: 10px;
-  color: #484848;
-  font-weight: bold;
-  font-size: 1.2rem;
-  cursor: pointer;
-  background: white;
-  transition: all 0.1s;
-  text-transform: uppercase;
-  outline: none;
+.pantalla-superior{
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  height: calc(100vh - 170px);
+}
+
+#stats-container{
+  flex: 1;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #68a0a0;
+  color: #60e080; /* Color verde retro para las stats */
+  padding: 15px;
+  transition: all 0.5s ease-in-out;
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+#stats-container h3{
+  color: white;
+  text-align: center;
+  border-bottom: 1px solid white;
+}
+
+.oculto{
+  display: none !important;
+  opacity: 0 !important;
+
+  max-width: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
 }
 
 /* Colores específicos para hover (selector manual) */
