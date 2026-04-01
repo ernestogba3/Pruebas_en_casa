@@ -1,17 +1,17 @@
 // 1. El Jugador: Un objeto para agrupar toda su información
 const jugador = {
-  nombre: "Héroe",
+  nombre: "Lancelot",
   nivel: 5,
   vida: 100,
   vidaMaxima: 100,
   ataque: 15,
   pociones: 3,
-  clase: "Guerrero",
+  clase: "Arquero",
 
   caracteristicas: function () {
     console.log(
       `| Nombre: ${this.nombre} | Clase: ${this.clase} |
-         |Ataque: ${this.ataque} | Vida: ${this.vida} |`,
+       |Ataque: ${this.ataque} | Vida: ${this.vida} |`,
     );
   },
 
@@ -26,12 +26,12 @@ const jugador = {
 
   atacar: function (enemigo) {
     //Restamos vida al enemigo
-    enemigo.vida -= this.ataque;
+    enemigo.vida -= jugadorActual.ataque;
 
     if (enemigo.vida <= 0) {
       enemigo.vida = 0;
 
-      escribirEnLog(`¡${jugador.nombre} ha derrotado a ${enemigo.nombre}! 🏆`);
+      escribirEnLog(`¡${jugadorActual.nombre} ha derrotado a ${enemigo.nombre}! 🏆`);
       const vidaEnemigoTexto = document.getElementById("vida-enemigo");
       vidaEnemigoTexto.innerText = enemigo.vida;
 
@@ -44,6 +44,34 @@ const jugador = {
 
   }
 }
+
+//Objeto enemigo
+const jugador2 = {
+  nombre: "Arturo",
+  nivel: 5,
+  vida: 50,
+  vidaMaxima: 50,
+  ataque: 20,
+  clase: "Guerrero",
+}
+
+let jugadorActual=jugador;
+
+function cambiarPersonaje(){
+  if(jugadorActual===jugador){
+    jugadorActual = jugador2;
+  }else{
+    jugadorActual=jugador;
+  }
+
+  actualizarNombre();
+  escribirEnLog(`Has cambiado a ${jugadorActual.nombre}`);
+}
+
+const btnCambiarJugador = document.getElementById("btn-cambio");
+btnCambiarJugador.addEventListener("click", () => {
+  cambiarPersonaje();
+});
 
 //Objeto enemigo
 const enemigo = {
@@ -69,9 +97,9 @@ btnSubirNivel.addEventListener("click", () => {
 function actualizarNombre() {
   const nombreJugadorContenedor = document.getElementById("nombre-jugador");
 
-  nombreJugadorContenedor.innerText = jugador.nombre.toUpperCase();
+  nombreJugadorContenedor.innerText = jugadorActual.nombre.toUpperCase();
 
-  escribirEnLog(`Esta combatiendo el ${jugador.nombre}`);
+  escribirEnLog(`Esta combatiendo el ${jugadorActual.nombre}`);
 }
 
 //Actualizar la vida del enemigo
@@ -92,10 +120,7 @@ function actualizarNombreEnemigo() {
 
   escribirEnLog(`Esta combatiendo el ${enemigo.nombre}`);
 }
-const btnCambiarJugador = document.getElementById("btn-cambio");
-btnCambiarJugador.addEventListener("click", () => {
-  actualizarNombre();
-});
+
 
 //Texto de encima del HUD
 const log = document.getElementById("registro-combate");
