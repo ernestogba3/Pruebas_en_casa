@@ -20,27 +20,32 @@ const jugador = {
     this.ataque += 5;
     console.log(`Subiste de nivel por tanto has ganado: ${this.ataque}`);
 
-    escribirEnLog(`${jugador.nombre} ha subido ${jugador.nivel}es`);
+    escribirEnLog(`${jugador.nombre} ha subido ${jugador.nivel} niveles`);
   },
 
 
-  atacar: function(jugador,enemigo){
+  atacar: function (enemigo) {
     //Restamos vida al enemigo
-    enemigo.vida-=this.ataque;
+    enemigo.vida -= this.ataque;
 
-    if(enemigo.vida <=0){
-        enemigo.vida=0;
-        escribirEnLog(`¡${jugador.nombre} ha derrotado a ${enemigo.nombre}! 🏆`);
-    }
-    const vidaEnemigoTexto = document.getElementById("vida-enemigo");
+    if (enemigo.vida <= 0) {
+      enemigo.vida = 0;
 
-    if(vidaEnemigoTexto){
-        vidaEnemigoTexto.innerText = enemigo.vida;
-        escribirEnLog(`${jugador.nombre} ataca. ¡A ${enemigo.nombre} le quedan ${enemigo.vida} HP!`);
-}
+      escribirEnLog(`¡${jugador.nombre} ha derrotado a ${enemigo.nombre}! 🏆`);
+      const vidaEnemigoTexto = document.getElementById("vida-enemigo");
+      vidaEnemigoTexto.innerText = enemigo.vida;
+
+    } else {
+
+      const vidaEnemigoTexto = document.getElementById("vida-enemigo");
+      vidaEnemigoTexto.innerText = enemigo.vida;
+      escribirEnLog(`Al slime le quedan: ${enemigo.vida} puntos de vida`);
     }
+
   }
+}
 
+//Objeto enemigo
 const enemigo = {
   nombre: "slime",
   nivel: 5,
@@ -50,9 +55,10 @@ const enemigo = {
   tipo: "bestia",
 }
 
-
-
-
+const btnLuchar = document.getElementById("btn-lucha");
+btnLuchar.addEventListener("click", () => {
+  jugador.atacar(enemigo);
+})
 
 const btnSubirNivel = document.getElementById("levelUp");
 btnSubirNivel.addEventListener("click", () => {
@@ -71,7 +77,6 @@ function actualizarNombre() {
 //Actualizar la vida del enemigo
 function actualizarVidaEnemigo() {
   const vidaEnemigoContenedor = document.getElementById("vida-enemigo");
-  console.log("que encontro js:", vidaEnemigoContenedor);
 
   vidaEnemigoContenedor.innerText = enemigo.vida;
 
@@ -87,8 +92,8 @@ function actualizarNombreEnemigo() {
 
   escribirEnLog(`Esta combatiendo el ${enemigo.nombre}`);
 }
-const btnCambiar = document.getElementById("btn-cambio");
-btnCambiar.addEventListener("click", () => {
+const btnCambiarJugador = document.getElementById("btn-cambio");
+btnCambiarJugador.addEventListener("click", () => {
   actualizarNombre();
 });
 
