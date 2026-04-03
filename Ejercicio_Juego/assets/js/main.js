@@ -1,60 +1,224 @@
 // 1. El Jugador: Un objeto para agrupar toda su información
-const jugador = {
-  nombre: "Lancelot",
-  nivel: 5,
-  vida: 100,
-  vidaMaxima: 100,
-  ataque: 15,
-  pociones: 3,
-  clase: "Arquero",
-};
+// const jugador = {
+//   nombre: "Lancelot",
+//   nivel: 5,
+//   vida: 100,
+//   vidaMaxima: 100,
+//   ataque: 15,
+//   defensa:8,
+//   defendiendo:false,
+//   clase: "Arquero",
+// };
 
-const jugador2 = {
-  nombre: "Arturo",
-  nivel: 5,
-  vida: 50,
-  vidaMaxima: 50,
-  ataque: 20,
-  clase: "Guerrero",
-};
+// const jugador2 = {
+//   nombre: "Arturo",
+//   nivel: 5,
+//   vida: 50,
+//   vidaMaxima: 50,
+//   defensa:10,
+//   defendiendo:false,
+//   ataque: 15,
+//   clase: "Guerrero",
+// };
 
-//Objeto enemigo
-const enemigo = {
-  nombre: "slime",
-  nivel: 5,
-  vida: 70,
-  vidaMaxima: 70,
-  ataque: 7,
-  tipo: "bestia",
-};
+// //Objeto enemigo
+// const enemigo = {
+//   nombre: "slime",
+//   nivel: 5,
+//   vida: 70,
+//   vidaMaxima: 70,
+//   ataque: 7,
+//   tipo: "bestia",
+// };
 
-//Variable para saber quien esta peleando
-let jugadorActual = jugador;
+const LISTA_POKEMON = [];
 
+const LISTA_ENEMIGOS = [
+  {
+    nombre: "Slime",
+    nivel: 3,
+    vida: 50,
+    vidaMaxima: 50,
+    ataque: 8,
+    defensa: 2,
+  },
+  {
+    nombre: "Orco",
+    nivel: 7,
+    vida: 150,
+    vidaMaxima: 150,
+    ataque: 20,
+    defensa: 15,
+  },
+  {
+    nombre: "Esqueleto",
+    nivel: 5,
+    vida: 80,
+    vidaMaxima: 80,
+    ataque: 12,
+    defensa: 8,
+  },
+];
+
+//Probamos api de pokemon
+async function obtenerPokemonDeAPI() {
+  try {
+    //Generamos un ID aleatorio para los pokemon de kanto entre 1 y 151
+    const idAleatorio = Math.floor(Math.random() * 151) + 1;
+
+    //Llamada a la API
+    const respuesta = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${idAleatorio}`,
+    );
+
+    if (!respuesta.ok) throw new Error("No se pudo conectar a la api");
+
+    const datos = await respuesta.json();
+
+    //Con los datos de la API creamos nuevo personaje
+
+    return {
+      nombre: datos.name.toUpperCase(),
+      nivel: 5,
+      //Adaptamos las stats a mi juego
+      vida: datos.stats[0].base_stat,
+      vidaMaxima: datos.stats[0].base_stat,
+      ataque: datos.stats[1].base_stat,
+      defensa: datos.stats[2].base_stat,
+      tipo:datos.types[0].type.name.toUpperCase(),
+      sprite:
+        datos.sprites.other["official-artwork"].front_default ||
+        datos.sprites.front_default ||
+        "https://via.placeholder.com/100",
+    };
+  } catch (error) {
+    console.error("Error al traer pokimons de la API:", error);
+    return {
+      nombre: "PIKACHU",
+      nivel: 5,
+      vida: 35,
+      vidaMaxima: 35,
+      ataque: 55,
+      defensa: 40,
+      defendiendo: false,
+      sprite:
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+      tipo: "Eléctrico",
+    };
+  }
+}
+//Añadiendo pokemon al array para formar el equipo
+async function prepararListaPokemon() {
+  escribirEnLog("Conectando con la base de datos de la API...");
+  for (let i = 0; i < 6; i++) {
+    const heroe = await obtenerPokemonDeAPI();
+    LISTA_POKEMON.push(heroe);
+    
+  }
+  console.log(LISTA_POKEMON);
+
+  escribirEnLog("Heroes añadidos correctamente");
+}
+
+prepararListaPokemon();
+
+//Funcion para elegir de forma aleatoria el personaje
+function obtenerPersonajeAleatorio(lista) {
+  const indice = Math.floor(Math.random() * lista.length);
+
+  return { ...lista[indice] };
+}
+
+//Inicio de partida
+let enemigo;
+let jugadorActual;
+
+async function iniciarCombate() {
+  jugadorActual = await obtenerPokemonDeAPI();
+  enemigo = await obtenerPokemonDeAPI();
+
+  if (jugadorActual && enemigo) {
+    actualizarInterfaz();
+
+    escribirEnLog(`!Un ${enemigo.nombre} salvaje aparece!`);
+    escribirEnLog(`¡Ve, ${jugadorActual.nombre}!`);
+
+    toggleBotones(false);
+  }
+}
+
+//TurnoEnemigo
+function turnoEnemigo() {
+  if (enemigo.vida <= 0) {
+    return;
+  } else {
+    escribirEnLog(
+      `${enemigo.nombre.toUpperCase()} se prepara para contraatacar...`,
+    );
+    setTimeout(() => {
+      let damage = enemigo.ataque;
+
+      jugadorActual.vida -= damage;
+
+      if (jugadorActual.vida <= 0) {
+        jugadorActual.vida = 0;
+        escribirEnLog(`¡${jugadorActual.nombre} ha caído en combate! 💀`);
+      } else {
+        escribirEnLog(
+          `${enemigo.nombre} ataca a ${jugadorActual.nombre}!. Pierdes ${damage} HP.`,
+        );
+      }
+
+      actualizarInterfaz();
+    }, 1000);
+  }
+}
 //Funcion para subida de nivel
 function subirNivel(jg) {
   jg.nivel += 1;
   jg.ataque += 5;
+  jg.defensa += 1;
   console.log(`Subiste de nivel por tanto has ganado: ${jg.ataque}`);
   escribirEnLog(`${jg.nombre} ha subido al nivel ${jg.nivel} (Ataque +5)`);
   actualizarStatsUI();
 }
 
+function toggleBotones(desactivar){
+  const botones = document.querySelectorAll(".btn");
+  botones.forEach(boton =>{
+    boton.disabled = desactivar;
+    boton.style.opacity = desactivar ? "0.5":"1";
+    boton.style.cursor = desactivar ? "not-allowed": "pointer";
+  });
+}
+
+function mostrarBotonReiniciar(){
+  const btnLucha = document.getElementById("btn-lucha");
+  btnLucha.innerText= "NUEVA PELEA";
+  btnLucha.disabled = false;
+  btnLucha.style.opacity="1";
+  btnLucha.onclick = () => window.location.reload();
+}
+
 //funcion para que los heroes hagan daño a el enemigo
 function atacar(jugadorActual, enemigo) {
   //Restamos vida al enemigo
-  enemigo.vida -= jugadorActual.ataque;
+  let danio = Math.max(5,jugadorActual.ataque -enemigo.defensa);
+  enemigo.vida -= danio;
 
   if (enemigo.vida <= 0) {
     enemigo.vida = 0;
+    actualizarInterfaz();
+    escribirEnLog(`¡${jugadorActual.nombre} ha derrotado a ${enemigo.nombre}! 🏆`,);
 
-    escribirEnLog(
-      `¡${jugadorActual.nombre} ha derrotado a ${enemigo.nombre}! 🏆`,
-    );
+    toggleBotones(true);
+    mostrarBotonReiniciar();
   } else {
-    escribirEnLog(
-      `${jugadorActual.nombre} ataca! a ${enemigo.nombre} le quedan ${enemigo.vida} HP`,
-    );
+    escribirEnLog(`${jugadorActual.nombre} ataca! a ${enemigo.nombre} le quedan ${enemigo.vida} HP`,);
+    actualizarInterfaz();
+
+    //Turno del enemigo
+    turnoEnemigo();
   }
 
   actualizarInterfaz();
@@ -72,15 +236,19 @@ function actualizarInterfaz() {
   document.getElementById("nombre-enemigo").innerText = enemigo.nombre;
   document.getElementById("vida-enemigo").innerText = enemigo.vida;
 
+  //Incluyendo imagenes en el HUD
+  document.getElementById("poke-img-enemigo").src=enemigo.sprite;
+  document.getElementById("poke-img-jugador").src = jugadorActual.sprite;
+
   //Actualiza la interfaz de estadisticas,Esto te asegura que mientras este abierto si subes de nivel se vera reflejado en la parte derecha al momento
   actualizarStatsUI();
 }
 
 function cambiarPersonaje() {
-  if (jugadorActual === jugador) {
-    jugadorActual = jugador2;
+  if (jugadorActual === obtenerPersonajeAleatorio(LISTA_POKEMON)) {
+    jugadorActual = LISTA_POKEMON[1];
   } else {
-    jugadorActual = jugador;
+    jugadorActual = obtenerPersonajeAleatorio(LISTA_POKEMON);
   }
 
   actualizarInterfaz();
@@ -112,9 +280,15 @@ function escribirEnLog(mensaje) {
 function actualizarStatsUI() {
   document.getElementById("stat-nombre").innerText = jugadorActual.nombre;
   document.getElementById("stat-nivel").innerText = jugadorActual.nivel;
+  document.getElementById("stat-tipo").innerText = jugadorActual.tipo;
   document.getElementById("stat-ataque").innerText = jugadorActual.ataque;
   document.getElementById("stat-vida").innerText = jugadorActual.vida;
   document.getElementById("stat-max-vida").innerText = jugadorActual.vidaMaxima;
+  document.getElementById("stat-defensa").innerText = jugadorActual.defensa;
+  document.getElementById("stat-postura").innerText = jugadorActual.defendiendo;
+
+  //actualizamos la foto
+  document.getElementById("poke-img").src = jugadorActual.sprite;
 }
 
 //4. Eventos de los botones
@@ -123,19 +297,23 @@ document.getElementById("btn-cambio").addEventListener("click", () => {
   cambiarPersonaje();
 });
 
+document.getElementById("btn-defender").addEventListener("click", () => {
+  ;
+});
+
 document.getElementById("btn-stat").addEventListener("click", () => {
   const panelStats = document.getElementById("stats-container");
 
-  if(panelStats){
+  if (panelStats) {
     panelStats.classList.toggle("oculto");
 
-  if (!panelStats.classList.contains("oculto")) {
-    actualizarStatsUI();
-    escribirEnLog("Abriendo panel de estadisticas...");
+    if (!panelStats.classList.contains("oculto")) {
+      actualizarStatsUI();
+      escribirEnLog("Abriendo panel de estadisticas...");
+    }
+  } else {
+    console.log("Error con el stat-container");
   }
-}else{
-  console.log("Error con el stat-container");
-}
 });
 
 document.getElementById("btn-lucha").addEventListener("click", () => {
@@ -147,6 +325,4 @@ document.getElementById("levelUp").addEventListener("click", () => {
 });
 
 //5. Iniciamos todo
-actualizarInterfaz();
-
-escribirEnLog(`Un ${enemigo.nombre} salvaje apareció`);
+iniciarCombate();
