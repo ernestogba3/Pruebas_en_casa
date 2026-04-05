@@ -9,8 +9,10 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #222; /* Fondo oscuro para resaltar el HUD */
-  font-family: 'Courier New', Courier, monospace; /* Tipografía estilo retro */
+  background-color: #222;
+  /* Fondo oscuro para resaltar el HUD */
+  font-family: 'Courier New', Courier, monospace;
+  /* Tipografía estilo retro */
   height: 100vh;
   overflow: hidden;
 }
@@ -26,7 +28,7 @@ body {
   box-sizing: border-box;
 }
 
-#game-container{
+#game-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -36,7 +38,8 @@ body {
 .dialog-box {
   flex: 1.5;
   padding: 20px;
-  border: 4px solid #68a0a0; /* Borde interior azulado clásico */
+  border: 4px solid #68a0a0;
+  /* Borde interior azulado clásico */
   margin: 5px;
   display: flex;
   align-items: center;
@@ -44,8 +47,15 @@ body {
   background: white;
   border-radius: 5px;
 }
+.dialog-contenido{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-#mensaje_enemigo,#mensaje_jugador {
+#mensaje_enemigo,
+#mensaje_jugador {
   font-size: 1.5rem;
   color: var(--border-dark);
   text-transform: uppercase;
@@ -55,13 +65,14 @@ body {
 #nombre-jugador {
   color: #e00000;
 }
-#nombre-enemigo{
+
+#nombre-enemigo {
   color: white;
 }
 
 /* Panel de botones (Derecha) */
 .commands-container {
-  flex: 1;
+  flex: 2;
   background-color: var(--bg-commands);
   padding: 10px;
   border-left: 6px solid var(--border-dark);
@@ -70,13 +81,21 @@ body {
 .action-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   gap: 8px;
   height: 100%;
 }
 
+.action-grid .btn:last-child {
+  grid-column: span 2;
+}
+
 /* Estilo de los botones */
-#levelUp,#btn-cambio,#btn-lucha,#btn-defender,#btn-stat,#btn-bolsa {
+#levelUp,
+#btn-cambio,
+#btn-lucha,
+#btn-stat,
+#btn-bolsa {
   border: 4px solid var(--border-light);
   border-radius: 10px;
   color: #484848;
@@ -88,19 +107,45 @@ body {
   text-transform: uppercase;
   outline: none;
 }
+
+.barra-vida-fondo {
+  width: 100%;
+  height: 10px;
+  background-color: #555;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 4px;
+  border: 1px solid #333;
+
+}
+
+.barra-vida-relleno {
+  height: 100%;
+  width: 100%;
+  /* se actualiza desde JS */
+  border-radius: 5px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+  background-color: #60e080;
+  /* verde por defecto */
+}
+
 #registro-combate {
-  flex: 2;
-  background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
-  border: 2px solid #68a0a0;           /* Borde a juego con el estilo Pokémon */
-  height: 100%;  
-  box-sizing: border-box;                     /* Altura fija para que el scroll funcione */
-  overflow-y: auto;                    /* Permite hacer scroll si hay muchos mensajes */
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Fondo negro semitransparente */
+  border: 2px solid #68a0a0;
+  /* Borde a juego con el estilo Pokémon */
+  height: 100%;
+  box-sizing: border-box;
+  /* Altura fija para que el scroll funcione */
+  overflow-y: auto;
+  /* Permite hacer scroll si hay muchos mensajes */
   padding: 15px;
   margin: 0;
   border-radius: 8px;
 }
 
-.pantalla-superior{
+.pantalla-superior {
   display: flex;
   gap: 10px;
   padding: 10px;
@@ -109,11 +154,12 @@ body {
   box-sizing: border-box;
 }
 
-#stats-container{
+#stats-container {
   flex: 1;
   background: rgba(0, 0, 0, 0.9);
   border: 2px solid #68a0a0;
-  color: #60e080; /* Color verde retro para las stats */
+  color: #60e080;
+  /* Color verde retro para las stats */
   padding: 15px;
   box-sizing: border-box;
   height: 100%;
@@ -122,19 +168,22 @@ body {
   opacity: 1;
   visibility: visible;
   display: block;
+  border-radius: 4px;
+
 }
-#stats-container h3{
+
+#stats-container h3 {
   color: white;
   text-align: center;
   border-bottom: 1px solid white;
 }
 
-#stats-container p{
-margin: 6px 0;
-font-size: 0.95rem;
+#stats-container p {
+  margin: 6px 0;
+  font-size: 0.95rem;
 }
 
-.hud-enemigo-superior{
+.hud-enemigo-superior {
   padding: 10px 20px;
   color: white;
   background-color: #222;
@@ -147,12 +196,12 @@ font-size: 0.95rem;
   gap: 20px;
 }
 
-#poke-img-jugador{
-  width: 80px;
-  height: 80px;
+#poke-img-jugador {
+  width: 70px;
+  height: 70px;
   vertical-align: middle;
   margin-right: 10px;
-  image-rendering:auto;
+  image-rendering: auto;
   border-radius: 4px;
   padding: 2px;
   background: rgba(0, 0, 0, 0.05);
@@ -160,30 +209,31 @@ font-size: 0.95rem;
 }
 
 
-.poke-img-container{
+.poke-img-container {
   border: 2px solid #fff;
-  padding: 5px;
-  border-radius: 4px;
+  padding: 4px;
+  border-radius: 2px;
 }
-#poke-img-enemigo{
+
+#poke-img-enemigo {
   width: 90px;
   height: 90px;
   display: block;
   image-rendering: pixelated;
 }
 
-.datos-enemigo-text p{
+.datos-enemigo-text p {
   margin: 5px 0;
   font-size: 1.5rem;
 }
 
-.datos-enemigo-text{
-  color:#ffffff;
+.datos-enemigo-text {
+  color: #ffffff;
   font-family: 'Courier New', Courier, monospace;
   text-transform: uppercase;
 }
 
-.oculto{
+.oculto {
   display: none !important;
   opacity: 0 !important;
 
@@ -194,15 +244,33 @@ font-size: 0.95rem;
 }
 
 /* Colores específicos para hover (selector manual) */
-#levelUp:hover { background-color: #ff5a5a; color: white; }
-#btn-cambio:hover { background-color: #ffda5a; color: white; }
-#btn-lucha:hover { background-color: #60e080; color: white; }
-#btn-defender:hover { background-color: #5ab2ff; color: white; }
-#btn-stat:hover { background-color: #c319c0; color: white; }
+#levelUp:hover {
+  background-color: #ff5a5a;
+  color: white;
+}
 
+#btn-cambio:hover {
+  background-color: #ffda5a;
+  color: white;
+}
+
+#btn-lucha:hover {
+  background-color: #60e080;
+  color: white;
+}
+
+#btn-stat:hover {
+  background-color: #c319c0;
+  color: white;
+}
+
+#btn-bolsa:hover {
+  background-color: #ffa05a;
+  color: white;
+}
 
 /* Efecto de pulsado */
 .btn:active {
   transform: scale(0.95);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 }

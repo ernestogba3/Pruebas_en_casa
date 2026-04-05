@@ -20,49 +20,76 @@
                     <p>ENEMIGO:<span id="nombre-enemigo"></span></p>
 
                     <div class="vida-container">
-                        <p>VIDA:<span id="vida-enemigo"></span> HP</p>
+                        <p>VIDA:<span id="vida-enemigo"></span>/ <span id="vida-max-enemigo"></span> HP</p>
+                        </p>
+
+                        <div class="barra-vida-fondo">
+                            <div class="barra-vida-relleno" id="barra-vida-enemigo"></div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        
 
+            <div class="pantalla-superior">
+                <div id="registro-combate"></div>
 
-        <div class="pantalla-superior">
-            <div id="registro-combate"></div>
+                <div id="stats-container" class="oculto">
+                    <img id="poke-img" alt="pokemon" style="width: 100px; display: block; margin: 0 auto;" />
+                    <h3>Estadisticas</h3>
+                    <p><span id="stat-nombre" style="display: flex; justify-content: center;"></span></p>
+                    <div style="display: flex;justify-content: space-around;">
 
-            <div id="stats-container" class="oculto">
-                <img id="poke-img" alt="pokemon" style="width: 100px; display: block; margin: 0 auto;"/>
-                <h3>Estadisticas</h3>
-                <p>Nombre: <span id="stat-nombre"></span></p>
-                <p>Nivel: <span id="stat-nivel"></span></p>
-                <p>Tipo: <span id="stat-tipo"></span></p>
-                <p>Ataque: <span id="stat-ataque"></span></p>
-                <p>Defensa: <span id="stat-defensa"></span></p>
-                <p>Postura: <span id="stat-postura"></span></p>
-                <p>Vida: <span id="stat-vida"></span> / Vmax:<span id="stat-max-vida"></span></p>
-            </div>
+                        <p>Nivel: <span id="stat-nivel"></span></p>
+                        <p>Tipo: <span id="stat-tipo"></span></p>
+                        <p>E.base: <span id="stat-exp"></span></p>
+                    </div>
 
+                    <div style="display:flex;justify-content: space-around;">
+                        <p>Vida: <span id="stat-vida"></span> / <span id="stat-max-vida"></span></p>
+                        <p>Defensa: <span id="stat-defensa"></span></p>
+                        <p>D.Esp:<span id="stat-defensa-especial"></span></p>
 
-        </div>
+                    </div>
 
-        <div class="battle-interface">
-            <div class="dialog-box">
-                <pid="mensaje_jugador"><img id="poke-img-jugador" alt="mi pokemon"/>
-                ¿Qué debería hacer <span id="nombre-jugador"></span>?</pid=>
-            </div>
-
-            <div class="commands-container">
-                <div class="action-grid">
-                    <button class="btn" id="btn-lucha">ATAQUE</button>
-                    <button class="btn" id="btn-defender">DEFENDER</button>
-                    <button class="btn" id="btn-bolsa">BOLSA</button>
-                    <button class="btn" id="btn-cambio">CAMBIAR</button>
-                    <button class="btn" id="btn-stat">ESTADISTICAS</button>
-                    <button class="btn" id="levelUp">SUBIR NIVEL</button>
+                    <div style="display: flex;justify-content: space-around;">
+                        <p>Ataque: <span id="stat-ataque"></span></p>
+                        <p>A.Esp: <span id="stat-ataque-especial"></span></p>
+                        <p>Velocidad: <span id="stat-velocidad"></span></p>
+                    </div>
 
                 </div>
+
             </div>
-        </div>
+
+            <div class="battle-interface">
+                
+                <div class="dialog-box">
+                    <div class="dialog-contenido">
+                    <p id="mensaje_jugador">
+                        <img id="poke-img-jugador" alt="mi pokemon"/>
+                        ¿Qué debería hacer <span id="nombre-jugador"></span>?
+                    </p>
+
+                    <div class="barra-vida-fondo">
+                        <div class="barra-vida-relleno" id="barra-vida-jugador"></div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="commands-container">
+                    <div class="action-grid">
+                        <button class="btn" id="btn-lucha">LUCHAR</button>
+                        <button class="btn" id="btn-bolsa">BOLSA</button>
+                        <button class="btn" id="btn-cambio">CAMBIAR</button>
+                        <button class="btn" id="btn-stat">ESTADISTICAS</button>
+                        <button class="btn" id="levelUp">SUBIR NIVEL</button>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+            
 
         </div>
     </main>
