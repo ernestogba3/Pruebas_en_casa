@@ -2,6 +2,68 @@ const LISTA_POKEMON = [];
 let enemigo;
 let jugadorActual;
 
+//Inventario
+const INVENTARIO = {
+  pocion: {nombre:"Pocion",cantidad:0,max:5,curacion:20},
+  superpocion:{nombre:"Superpocion",cantidad:0,max:3,curacion:50},
+  hiperpocion:{nombre:"Hiperpocion",cantidad:0,max:1,curacion:150},
+};
+
+// Lista fija de objetos equipables
+const OBJETOS_EQUIPABLES = [
+  {
+    nombre: "Baya Zidra",
+    descripcion: "Una baya que restaura 10 HP al bajar de la mitad de vida.",
+    efecto: "restauracion_auto"
+  },
+  {
+    nombre: "Piedra Vida",
+    descripcion: "Un objeto que aumenta ligeramente todos los stats del portador.",
+    efecto: "boost_stats"
+  },
+  {
+    nombre: "Carbón",
+    descripcion: "Aumenta el poder de los movimientos de tipo Fuego.",
+    efecto: "boost_fuego"
+  },
+  {
+    nombre: "Imán",
+    descripcion: "Aumenta el poder de los movimientos de tipo Eléctrico.",
+    efecto: "boost_electrico"
+  },
+  {
+    nombre: "Mística Agua",
+    descripcion: "Aumenta el poder de los movimientos de tipo Agua.",
+    efecto: "boost_agua"
+  },
+  {
+    nombre: "Milagrosemilla",
+    descripcion: "Aumenta el poder de los movimientos de tipo Planta.",
+    efecto: "boost_planta"
+  },
+  {
+    nombre: "Banda Focus",
+    descripcion: "A veces evita que el portador sea debilitado de un solo golpe.",
+    efecto: "focus"
+  },
+  {
+    nombre: "Restos",
+    descripcion: "Restaura un poco de HP al portador al final de cada turno.",
+    efecto: "restauracion_turno"
+  },
+  {
+    nombre: "Cinta Elegida",
+    descripcion: "Aumenta el Ataque Especial pero solo permite usar un movimiento.",
+    efecto: "boost_ataque_especial"
+  },
+  {
+    nombre: "Banda Elegida",
+    descripcion: "Aumenta el Ataque pero solo permite usar un movimiento.",
+    efecto: "boost_ataque"
+  },
+];
+
+
 //Musica
 const musicaFondo = new Audio(
   "/pruebas_en_casa/Ejercicio_Juego/assets/audio/musica-fondo.mp3",
@@ -52,7 +114,7 @@ function reproducirGrito(pokemon) {
 //Inicio de partida
 async function iniciarCombate() {
   jugadorActual = { ...LISTA_POKEMON[0] };
-  enemigo = await obtenerPokemonDeAPI();
+  enemigo = await obtenerPokemonDeAPI(true);
 
   if (jugadorActual && enemigo) {
     actualizarInterfaz();
@@ -85,7 +147,7 @@ function seleccionarPokemon(pokemon) {
 }
 
 //4.---------------------------------Eventos-------------------------------------------
-document.querySelectorAll(".btn, .btn-pokemon-equipo, #btn-volver-cambio").forEach((btn) => {
+document.querySelectorAll(".btn, .btn-pokemon-equipo, #btn-volver-cambio,.btn-objeto-bolsa,#btn-volver-bolsa").forEach((btn) => {
   btn.addEventListener("click", () => {
     iniciarMusica();
     reproducirSonidoClick();
@@ -124,13 +186,15 @@ document.getElementById("btn-volver").addEventListener("click", () =>{
   ocultarMenuMovimientos();
 })
 
-document.getElementById("levelUp").addEventListener("click", () => {
-  subirNivel(jugadorActual);
-});
+
 
 document.getElementById("btn-bolsa").addEventListener("click", () => {
-  escribirEnLog("🎒 La bolsa está vacía. (Próximamente)");
+  mostrarMenuBolsa();
 });
+
+document.getElementById("btn-volver-bolsa").addEventListener("click", () =>{
+  ocultarMenuBolsa();
+})
 
 //Los 4 botones de movimiento
 document.querySelectorAll(".btn-movimiento").forEach((btn,i)=>{
@@ -138,8 +202,9 @@ document.querySelectorAll(".btn-movimiento").forEach((btn,i)=>{
     const movimiento = jugadorActual.movimientos[i];
     ocultarMenuMovimientos();
     atacar(jugadorActual,enemigo,movimiento);
-  })
-})
+    reproducirSonidoClick();
+  });
+});
 
 //5. Iniciamos todo
 arrancarJuego();

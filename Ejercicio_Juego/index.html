@@ -20,6 +20,7 @@
 
                 <div class="datos-enemigo-text">
                     <p>ENEMIGO:<span id="nombre-enemigo"></span></p>
+                    <p>Nivel:<span id="nivel-enemigo"></span></p>
 
                     <div class="vida-container">
                         <p>VIDA:<span id="vida-enemigo"></span>/ <span id="vida-max-enemigo"></span> HP</p>
@@ -76,6 +77,12 @@
                         <div class="barra-vida-fondo">
                             <div class="barra-vida-relleno" id="barra-vida-jugador"></div>
                         </div>
+
+                        <div class="barra-exp-fondo">
+                            <div class="barra-exp-relleno" id="barra-exp-jugador">
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -85,7 +92,6 @@
                         <button class="btn" id="btn-bolsa">BOLSA</button>
                         <button class="btn" id="btn-cambio">CAMBIAR</button>
                         <button class="btn" id="btn-stat">ESTADISTICAS</button>
-                        <button class="btn" id="levelUp">SUBIR NIVEL</button>
                     </div>
 
                     <div class="action-grid" id="menu-movimientos" style="display: none;">
@@ -100,6 +106,11 @@
                     <div id="menu-cambio" style="display:none;">
                         <div id="lista-pokemon-equipo"></div>
                         <button class="btn" id="btn-volver-cambio">⬅ VOLVER</button>
+                    </div>
+                    
+                    <div id="menu-bolsa" style="display: none;">
+                        <div id="lista-objetos-bolsa"></div>
+                        <button class="btn" id="btn-volver-bolsa">VOLVER</button>
                     </div>
                 </div>
             </div>

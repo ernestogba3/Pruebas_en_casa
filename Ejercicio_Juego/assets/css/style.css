@@ -81,18 +81,16 @@ body {
 
 .action-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  gap: 8px;
+  grid-template-columns:repeat(2,1fr);
+  grid-template-rows: repeat(2,1fr);
+  gap: 10px;
   height: 100%;
+  flex: 1;
 }
 
-.action-grid .btn:last-child {
-  grid-column: span 2;
-}
+
 
 /* Estilo de los botones */
-#levelUp,
 #btn-cambio,
 #btn-lucha,
 #btn-stat,
@@ -111,8 +109,6 @@ body {
   text-transform: uppercase;
   outline: none;
 }
-
-
 
 .barra-vida-fondo {
   width: 100%;
@@ -249,10 +245,6 @@ body {
 }
 
 /* Colores específicos para hover (selector manual) */
-#levelUp:hover {
-  background-color: #ff5a5a;
-  color: white;
-}
 
 #btn-cambio:hover {
   background-color: #ffda5a;
@@ -509,4 +501,89 @@ body {
   background-color: #f0b6bc;
   color: #333;
   border-color: #c07880;
+}
+
+#menu-bolsa {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+#lista-objetos-bolsa {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  flex: 1;
+}
+
+.btn-objeto-bolsa {
+  border: 3px solid var(--border-light);
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  cursor: pointer;
+  transition: all 0.1s;
+  text-transform: uppercase;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: white;
+  color: #333;
+  padding: 4px;
+}
+
+.btn-objeto-bolsa:hover {
+  transform: scale(1.03);
+  border-color: #ffa05a;
+}
+
+/* Objeto sin cantidad — desactivado */
+.btn-objeto-bolsa.vacio {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+#btn-volver-bolsa {
+  border: 4px solid var(--border-light);
+  border-radius: 10px;
+  color: #484848;
+  font-weight: bold;
+  font-size: 0.65rem;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transition: all 0.1s;
+  text-transform: uppercase;
+  outline: none;
+  padding: 6px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+#btn-volver-bolsa:hover {
+  background-color: #e03030;
+  color: white;
+}
+
+/* Barra de Experiencia */
+.barra-exp-fondo {
+  width: 100%;
+  height: 6px;
+  background-color: #333;
+  margin-top: 4px;
+  border: 1px solid #000;
+  border-radius: 2px;
+}
+
+.barra-exp-relleno {
+  height: 100%;
+  width: 0%; /* Se controla por JS */
+  background-color: #3a86ff;
+  transition: width 0.5s ease-out;
 }
