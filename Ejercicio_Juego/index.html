@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG</title>
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -63,38 +65,53 @@
             </div>
 
             <div class="battle-interface">
-                
+
                 <div class="dialog-box">
                     <div class="dialog-contenido">
-                    <p id="mensaje_jugador">
-                        <img id="poke-img-jugador" alt="mi pokemon"/>
-                        ¿Qué debería hacer <span id="nombre-jugador"></span>?
-                    </p>
+                        <p id="mensaje_jugador">
+                            <img id="poke-img-jugador" alt="mi pokemon" />
+                            ¿Qué debería hacer <span id="nombre-jugador"></span>?
+                        </p>
 
-                    <div class="barra-vida-fondo">
-                        <div class="barra-vida-relleno" id="barra-vida-jugador"></div>
+                        <div class="barra-vida-fondo">
+                            <div class="barra-vida-relleno" id="barra-vida-jugador"></div>
+                        </div>
                     </div>
-                </div>
                 </div>
 
                 <div class="commands-container">
-                    <div class="action-grid">
+                    <div class="action-grid" id="menu-principal">
                         <button class="btn" id="btn-lucha">LUCHAR</button>
                         <button class="btn" id="btn-bolsa">BOLSA</button>
                         <button class="btn" id="btn-cambio">CAMBIAR</button>
                         <button class="btn" id="btn-stat">ESTADISTICAS</button>
                         <button class="btn" id="levelUp">SUBIR NIVEL</button>
+                    </div>
 
+                    <div class="action-grid" id="menu-movimientos" style="display: none;">
+                        <button class="btn btn-movimiento" id="mov-0"></button>
+                        <button class="btn btn-movimiento" id="mov-1"></button>
+                        <button class="btn btn-movimiento" id="mov-2"></button>
+                        <button class="btn btn-movimiento" id="mov-3"></button>
+                        <button class="btn" id="btn-volver">VOLVER</button>
+                    </div>
+
+                    
+                    <div id="menu-cambio" style="display:none;">
+                        <div id="lista-pokemon-equipo"></div>
+                        <button class="btn" id="btn-volver-cambio">⬅ VOLVER</button>
                     </div>
                 </div>
             </div>
-            </div>
-            
+        </div>
+
 
         </div>
     </main>
 
-
+    <script src="./assets/js/api.js"></script>
+    <script src="./assets/js/combate.js"></script>
+    <script src="./assets/js/interfaz.js"></script>
     <script src="./assets/js/main.js"></script>
 </body>
 
