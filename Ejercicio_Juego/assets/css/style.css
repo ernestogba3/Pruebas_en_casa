@@ -39,13 +39,12 @@ body {
   flex: 1.5;
   padding: 20px;
   border: 4px solid #68a0a0;
-  /* Borde interior azulado clásico */
+  border-radius: 8px;
   margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: white;
-  border-radius: 5px;
 }
 
 .dialog-contenido {

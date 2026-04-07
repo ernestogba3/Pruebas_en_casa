@@ -90,18 +90,18 @@ function mostrarMenuMovimientos() {
     btn.dataset.tipo = mov.tipo;
   });
 
-  const menuPrincipal = (document.getElementById(
+  document.getElementById(
     "menu-principal",
-  ).style.display = "none");
-  const menuMovimientos = (document.getElementById(
+  ).style.display = "none";
+  document.getElementById(
     "menu-movimientos",
-  ).style.display = "grid");
+  ).style.display = "grid";
 }
 
 function ocultarMenuMovimientos() {
-  const menuPrincipal = (document.getElementById(
+  document.getElementById(
     "menu-principal",
-  ).style.display = "grid");
+  ).style.display = "grid";
   const menuMovimientos = (document.getElementById(
     "menu-movimientos",
   ).style.display = "none");

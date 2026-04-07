@@ -20,7 +20,6 @@ async function obtenerPokemonDeAPI(nivelReferencia =5) {
       ataque: Math.floor(datos.stats[1].base_stat + (nivelFinal * 1.5)),
       defensa: Math.floor(datos.stats[2].base_stat + (nivelFinal * 1.2)),
       defensaEspecial: Math.floor(datos.stats[4].base_stat + (nivelFinal * 1.2)),
-      ataque: Math.floor(datos.stats[1].base_stat + (nivelFinal * 1.5)),
       ataqueEspecial: Math.floor(datos.stats[3].base_stat + (nivelFinal * 1.4)),
       velocidad: Math.floor(datos.stats[5].base_stat + (nivelFinal * 1.3)),
       tipo: datos.types[0].type.name.toUpperCase(),
@@ -43,7 +42,8 @@ async function obtenerPokemonDeAPI(nivelReferencia =5) {
     return {
       nombre: "PIKACHU", nivel: 5, vida: 35, vidaMaxima: 35, ataque: 55, ataqueEspecial: 45,
       defensa: 40, defensaEspecial: 35, velocidad: 55, 
-      experienciaActual: 0, expSiguienteNivel: 75,
+      expActual: 0, expSiguienteNivel: 75,
+      objetoEquipado: OBJETOS_EQUIPABLES[0],
       sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
       tipo: "ELECTRIC",
       movimientos: [

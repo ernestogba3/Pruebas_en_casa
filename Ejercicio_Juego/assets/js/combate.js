@@ -203,7 +203,7 @@ async function subirNivel(pokemon) {
 }
 
 async function nuevoCombate() {
-  // enemigo = await obtenerPokemonDeAPI(jugadorActual.nivel); // <--- Le pasamos true para que le dé nivel aleatorio
+  enemigo = await obtenerPokemonDeAPI(jugadorActual.nivel); // <--- Le pasamos true para que le dé nivel aleatorio
    const btnLucha = document.getElementById("btn-lucha");
   toggleBotones(true);
 

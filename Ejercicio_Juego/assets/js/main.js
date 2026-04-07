@@ -65,9 +65,7 @@ const OBJETOS_EQUIPABLES = [
 
 
 //Musica
-const musicaFondo = new Audio(
-  "/pruebas_en_casa/Ejercicio_Juego/assets/audio/musica-fondo.mp3",
-);
+const musicaFondo = new Audio("/pruebas_en_casa/Ejercicio_Juego/assets/audio/musica-fondo.mp3");
 musicaFondo.loop = true;
 musicaFondo.volume = 0.3;
 let musicaIniciada = false;
@@ -114,7 +112,7 @@ function reproducirGrito(pokemon) {
 //Inicio de partida
 async function iniciarCombate() {
   jugadorActual = { ...LISTA_POKEMON[0] };
-  enemigo = await obtenerPokemonDeAPI(true);
+  enemigo = await obtenerPokemonDeAPI(jugadorActual.nivel);
 
   if (jugadorActual && enemigo) {
     actualizarInterfaz();
@@ -202,7 +200,6 @@ document.querySelectorAll(".btn-movimiento").forEach((btn,i)=>{
     const movimiento = jugadorActual.movimientos[i];
     ocultarMenuMovimientos();
     atacar(jugadorActual,enemigo,movimiento);
-    reproducirSonidoClick();
   });
 });
 
