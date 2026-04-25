@@ -65,7 +65,7 @@ const OBJETOS_EQUIPABLES = [
 
 
 //Musica
-const musicaFondo = new Audio("/pruebas_en_casa/Ejercicio_Juego/assets/audio/musica-fondo.mp3");
+const musicaFondo = new Audio("pruebas_en_casa/Ejercicio_Juego/assets/audio/musica-fondo.mp3");
 musicaFondo.loop = true;
 musicaFondo.volume = 0.3;
 let musicaIniciada = false;
@@ -144,6 +144,19 @@ function seleccionarPokemon(pokemon) {
   reproducirGrito(jugadorActual);
 }
 
+async function reiniciarJuego() {
+  // Limpiar estado
+  LISTA_POKEMON.length = 0;
+  jugadorActual = null;
+  enemigo = null;
+
+  // Limpiar log de combate
+  document.getElementById("registro-combate").innerHTML = "";
+
+  // Volver a arrancar desde cero
+  await arrancarJuego();
+}
+
 //4.---------------------------------Eventos-------------------------------------------
 document.querySelectorAll(".btn, .btn-pokemon-equipo, #btn-volver-cambio,.btn-objeto-bolsa,#btn-volver-bolsa").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -183,8 +196,6 @@ document.getElementById("btn-volver-cambio").addEventListener("click", () => {
 document.getElementById("btn-volver").addEventListener("click", () =>{
   ocultarMenuMovimientos();
 })
-
-
 
 document.getElementById("btn-bolsa").addEventListener("click", () => {
   mostrarMenuBolsa();

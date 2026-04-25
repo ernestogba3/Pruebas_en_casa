@@ -26,7 +26,6 @@ async function obtenerPokemonDeAPI(nivelReferencia =5) {
       experiencia_base: datos.base_experience || 64,
       expActual: 0,
       expSiguienteNivel: Math.floor(100 * Math.pow(1.2, nivelFinal)),
-      experienciaMax: nivelFinal * nivelFinal * 3,
 
       sprite:
         datos.sprites.other["official-artwork"].front_default ||

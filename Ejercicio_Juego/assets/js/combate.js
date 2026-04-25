@@ -176,35 +176,45 @@ async function ganarExp(poke, cantidad) {
   while (poke.expActual >= poke.expSiguienteNivel) {
     poke.expActual -= poke.expSiguienteNivel;
     poke.nivel++;
+
     poke.expSiguienteNivel = Math.floor(poke.expSiguienteNivel * 1.3);
     // Subida de stats básica
     poke.vidaMaxima += 5;
+    poke.vida+=5;
+    poke.vida = Math.min(poke.vida,poke.vidaMaxima);
     poke.ataque += 2;
     poke.defensa += 2;
-    escribirEnLog(`¡${poke.nombre} subió al nivel ${poke.nivel}!`);
+    // Sincronizar con LISTA_POKEMON (lo que le faltaba a ganarExp)
+    const indice = LISTA_POKEMON.findIndex(p => p.nombre === poke.nombre);
+    if (indice !== -1) LISTA_POKEMON[indice] = { ...poke };
+
+    await esperar(400);
+    escribirEnLog(`¡🎉 ${poke.nombre} subió al nivel ${poke.nivel}!`);
+    actualizarStatsUI();
   }
 }
 
-async function subirNivel(pokemon) {
-  pokemon.nivel += 1;
-  pokemon.ataque += 3;
-  pokemon.defensa += 2;
-  pokemon.vidaMaxima += 5;
-  pokemon.vida += 5; // Le cura la vida máxima que acaba de ganar
-  pokemon.experienciaMax = Math.floor(pokemon.experienciaMax * 1.5); // Escala para el siguiente nivel
 
-  // Sincronizar con el equipo general si no es el activo
-  const indice = LISTA_POKEMON.findIndex((p) => p.nombre === pokemon.nombre);
-  if (indice !== -1) LISTA_POKEMON[indice] = { ...pokemon };
+async function nuevoCombate(jugadorHaGanado = true) {
+  const indiceActual = LISTA_POKEMON.findIndex(p => p.nombre === jugadorActual.nombre);
+  if(indiceActual !== -1){
+    LISTA_POKEMON[indiceActual].vida = jugadorActual.vida;
+  }
 
-  await esperar(500);
-  escribirEnLog(`¡🎉 ${pokemon.nombre} ha subido al nivel ${pokemon.nivel}!`);
-  actualizarStatsUI();
-}
+  if(equipoDerrotado()){
+    mostrarGameOver();
+    return;
+  }
 
-async function nuevoCombate() {
-  enemigo = await obtenerPokemonDeAPI(jugadorActual.nivel); // <--- Le pasamos true para que le dé nivel aleatorio
-   const btnLucha = document.getElementById("btn-lucha");
+  if(jugadorActual.vida <=0){
+    const siguiente = LISTA_POKEMON.find(p => p.vida >0);
+    jugadorActual = {...siguiente};
+    escribirEnLog(`¡${jugadorActual.nombre}, adelante!`);
+    await reproducirGrito(jugadorActual);
+    }
+  
+
+  const btnLucha = document.getElementById("btn-lucha");
   toggleBotones(true);
 
   // Mensajes progresivos con pausa entre ellos
@@ -215,8 +225,7 @@ async function nuevoCombate() {
   await esperar(1000);
   escribirEnLog("Buscando nuevo rival...");
 
-  jugadorActual.vida = jugadorActual.vidaMaxima;
-  enemigo = await obtenerPokemonDeAPI();
+  enemigo = await obtenerPokemonDeAPI(jugadorActual.nivel);
 
   await esperar(800);
   escribirEnLog(`¡Un ${enemigo.nombre} salvaje aparece!`);
@@ -229,7 +238,7 @@ async function nuevoCombate() {
   toggleBotones(false);
 
   actualizarInterfaz();
-}
+  }
 
 //funcion para que los heroes hagan daño a el enemigo
 async function atacar(jugadorActual, enemigo, movimiento) {
@@ -268,12 +277,13 @@ async function atacar(jugadorActual, enemigo, movimiento) {
       enemigo.vida = 0;
       actualizarInterfaz();
       escribirEnLog(`¡${jugadorActual.nombre} ha derrotado a ${enemigo.nombre}! 🏆`);
-
+  
       await repartirExperiencia(enemigo);
       darRecompensa(enemigo);
 
       toggleBotones(true);
       await nuevoCombate();
+      return;
 
     } else {
       escribirEnLog(`${jugadorActual.nombre} ataca! a ${enemigo.nombre} le quedan ${enemigo.vida} HP`);
@@ -290,26 +300,58 @@ async function atacar(jugadorActual, enemigo, movimiento) {
 //TurnoEnemigo
 function turnoEnemigo() {
   if (enemigo.vida <= 0) return;
-  toggleBotones(true); //bloquea los botones mientras el enemigo ataca.
-  escribirEnLog(
-    `${enemigo.nombre.toUpperCase()} se prepara para contraatacar...`,
-  );
+  toggleBotones(true);
+  escribirEnLog(`${enemigo.nombre} se prepara para contraatacar...`);
 
   setTimeout(async () => {
-    let damage = Math.max(5, enemigo.ataque - jugadorActual.defensa);
-    jugadorActual.vida -= damage;
+
+    // 1. Elegir movimiento aleatorio del enemigo
+    const movimiento = enemigo.movimientos.reduce((mejor, mov) => {
+    const mult = calcularMultiplicador(mov.tipo, jugadorActual.tipo);
+    const mejorMult = calcularMultiplicador(mejor.tipo, jugadorActual.tipo);
+    return mult > mejorMult ? mov : mejor;
+    });
+
+    // 2. Calcular multiplicador de tipo (movimiento del enemigo vs tipo del jugador)
+    const multiplicador = calcularMultiplicador(movimiento.tipo, jugadorActual.tipo);
+
+    // 3. Calcular daño con la misma fórmula que atacar()
+    let danio = Math.max(5, enemigo.ataque + movimiento.potencia / 10 - jugadorActual.defensa);
+    danio = Math.round(danio * multiplicador);
+
+    // 4. Si es inmune, no hacer nada y devolver el turno
+    if (multiplicador === 0) {
+      escribirEnLog(`${movimiento.nombre} no afecta a ${jugadorActual.nombre}...`);
+      toggleBotones(false);
+      return;
+    }
+
+    // 5. Mensaje de efectividad
+    escribirEnLog(`${enemigo.nombre} usa ${movimiento.nombre}!`);
+    if (multiplicador >= 2) escribirEnLog(`¡Es superefectivo! x${multiplicador}`);
+    else if (multiplicador <= 0.5) escribirEnLog("No es muy efectivo...");
+
+    danio = Math.max(1, danio);
+    jugadorActual.vida -= danio;
 
     if (jugadorActual.vida <= 0) {
       jugadorActual.vida = 0;
       actualizarInterfaz();
       escribirEnLog(`¡${jugadorActual.nombre} ha caído en combate! 💀`);
+
+      const idx = LISTA_POKEMON.findIndex(p => p.nombre === jugadorActual.nombre);
+      if (idx !== -1) LISTA_POKEMON[idx].vida = 0;
+
       await nuevoCombate();
     } else {
-      escribirEnLog(
-        `${enemigo.nombre} ataca a ${jugadorActual.nombre}!. Pierdes ${damage} HP.`,
-      );
+      escribirEnLog(`${jugadorActual.nombre} pierde ${danio} HP.`);
       actualizarInterfaz();
       toggleBotones(false);
     }
+
   }, 1000);
+}
+
+function equipoDerrotado() {
+  return LISTA_POKEMON.every(p => p.vida <= 0);
 }

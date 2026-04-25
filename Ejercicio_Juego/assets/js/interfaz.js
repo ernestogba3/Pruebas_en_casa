@@ -201,3 +201,70 @@ function ocultarMenuBolsa() {
   document.getElementById("menu-bolsa").style.display = "none";
   document.getElementById("menu-principal").style.display = "grid";
 }
+
+function mostrarGameOver() {
+  toggleBotones(true);
+
+  // Calcular estadísticas de la partida
+  const nivelMedio = Math.round(
+    LISTA_POKEMON.reduce((sum, p) => sum + p.nivel, 0) / LISTA_POKEMON.length
+  );
+  const pokemonMasAlto = LISTA_POKEMON.reduce((mejor, p) =>
+    p.nivel > mejor.nivel ? p : mejor
+  );
+
+  // Crear overlay
+  const overlay = document.createElement("div");
+  overlay.id = "game-over-overlay";
+  overlay.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 999;
+    font-family: 'Press Start 2P', monospace;
+    color: white;
+  `;
+
+  overlay.innerHTML = `
+    <p style="font-size: 1.4rem; color: #e03030; margin: 0;">GAME OVER</p>
+    <p style="font-size: 0.6rem; color: #aaa; margin: 0;">Todos tus Pokémon han caído</p>
+
+    <div style="
+      border: 2px solid #68a0a0;
+      border-radius: 8px;
+      padding: 20px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.55rem;
+      color: #ccc;
+      text-align: center;
+    ">
+      <p style="margin:0;">Nivel medio del equipo: <span style="color:#ffd700">${nivelMedio}</span></p>
+      <p style="margin:0;">Pokémon más fuerte: <span style="color:#60e080">${pokemonMasAlto.nombre} (Nv.${pokemonMasAlto.nivel})</span></p>
+    </div>
+
+    <button id="btn-reiniciar" style="
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
+      padding: 12px 24px;
+      background: #60e080;
+      border: 3px solid white;
+      border-radius: 8px;
+      color: #222;
+      cursor: pointer;
+    ">REINICIAR</button>
+  `;
+
+  document.body.appendChild(overlay);
+
+  document.getElementById("btn-reiniciar").addEventListener("click", () => {
+    overlay.remove();
+    reiniciarJuego();
+  });
+}
